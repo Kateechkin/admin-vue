@@ -2,7 +2,8 @@ const gulp = require("gulp");
 const sass = require('gulp-sass');
 const source = require('vinyl-source-stream');
 const browserify = require('browserify');
-const dist = "/Applications/MAMP/htdocs/vue/admin"
+const dist = "/Applications/MAMP/htdocs/vue/admin";
+// const envify = require('envify/custom')
 
 gulp.task("copy-html", () => {
    return gulp.src("./app/src/index.html")
@@ -19,7 +20,13 @@ gulp.task("copy-assets", () => {
 
 gulp.task("build-js", () => {
    return browserify('./app/src/main.js', { debug: true })
-      // .transform("babelify", { presets: ["@babel/preset-env"], sourceMaps: true })
+      // .transform(vueify)
+      // .transform(
+      //    // Required in order to process node_modules files
+      //    { global: true },
+      //    envify({ NODE_ENV: 'production' })
+      // )
+      .transform("babelify", { presets: ["@babel/preset-env"], sourceMaps: true })
       .bundle()
       .pipe(source('bundle.js'))
       .pipe(gulp.dest(dist));
